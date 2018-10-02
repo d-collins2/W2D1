@@ -1,4 +1,5 @@
-require_relative "piece"
+require_relative "piece/piece"
+require_relative "piece/nullpiece"
 require 'byebug'
 
 class PositionError < StandardError; end
@@ -11,10 +12,31 @@ class Board
     @sentinel = NullPiece.instance
     grid.each_with_index do |row, n|
       if piece_row.include?(n)
-        8.times {row << Piece.new}
+        8.times do |i|
+          if n == 0 || n == 7
+            row << last_row_piece(n, i)
+          elsif n == 1 || n == 6
+            row << Pawn.new(nil,self,[n, i])
+          end
+        end
       else
         8.times {row << @sentinel}
       end
+    end
+  end
+
+  def last_row_piece(rnum, cnum)
+    case cnum
+    when 0, 7
+      Rook.new(nil,self,[rnum, cnum])
+    when 1, 6
+      Knight.new(nil,self,[rnum, cnum])
+    when 2, 5
+      Bishop.new(nil,self,[rnum, cnum])
+    when 3
+      Queen.new(nil,self,[rnum, cnum])
+    else
+      King.new(nil,self,[rnum, cnum])
     end
   end
 

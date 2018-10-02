@@ -1,7 +1,9 @@
 require "colorize"
 require_relative "cursor.rb"
+
 class Display
   attr_reader :board, :cursor
+
   def initialize(board)
     @board = board
     @cursor = Cursor.new([0, 0], board)
@@ -12,9 +14,9 @@ class Display
     board.grid.each_with_index do |row, i|
       string_row = row.map.with_index do |el, j|
         if cursor.cursor_pos == [i,j]
-          el.to_s.colorize(:background => :light_yellow)
+          el.to_s.colorize(:color => el.color, :background => :light_yellow)
         else
-          el.to_s
+          el.to_s.colorize(:color => el.color)
         end
       end
       puts "#{i} #{string_row.join(" ")}"
