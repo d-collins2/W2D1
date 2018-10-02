@@ -10,28 +10,24 @@ class Display
   def render
     puts "  0 1 2 3 4 5 6 7"
     board.grid.each_with_index do |row, i|
-
       string_row = row.map.with_index do |el, j|
-        if el.is_a?(Piece)
-          if cursor.cursor_pos == [i,j]
-            "x".colorize(:red)
-          else
-            "x"
-          end
+        if cursor.cursor_pos == [i,j]
+          el.to_s.colorize(:background => :light_yellow)
         else
-          " "
+          el.to_s
         end
-
       end
       puts "#{i} #{string_row.join(" ")}"
     end
   end
 
   def make_move
-
+    while true
+      system("clear")
       render
-      cursor.get_input
-      render
+      movement = cursor.get_input
+      break if movement.is_a?(Array)
+    end
   end
 
 end
